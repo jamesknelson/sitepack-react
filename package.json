@@ -1,0 +1,31 @@
+{
+  "name": "sitepack-react",
+  "version": "1.0.0-beta.1",
+  "description": "React components for working with Sitepack",
+  "author": "James K Nelson <james@jamesknelson.com>",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "scripts": {
+    "clean": "rimraf lib",
+    "build:watch": "cross-env BABEL_ENV=commonjs babel --watch --source-maps=inline -d lib/ source/",
+    "build": "cross-env BABEL_ENV=commonjs babel source --out-dir lib",
+    "prepublish": "npm run clean && npm run build"
+  },
+  "devDependencies": {
+    "babel-core": "^6.22.1",
+    "babel-plugin-transform-class-properties": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.22.0",
+    "babel-preset-latest": "^6.22.0",
+    "babel-preset-react": "^6.22.0",
+    "cross-env": "^3.1.4",
+    "rimraf": "^2.5.4"
+  },
+  "peerDependencies": {
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "sitepack": "1.0.0-beta.1"
+  },
+  "dependencies": {
+    "junctions": "^0.3.2"
+  }
+}
