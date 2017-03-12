@@ -42,31 +42,28 @@ export default class Link extends Component {
       this.props.onClick(event)
     }
 
-    if (event.defaultPrevented) {
+    if (event.defaultPrevented ||
+        isModifiedEvent(event) ||
+        !isLeftClickEvent(event) ||
+        this.props.target
+    ) {
       return
     }
 
     const history = this.props.history || this.context.history
-    const location = this.getLocation()
 
     if (!history) {
       throw new Error('<Link> requires a history object to be passed in, either via props or via context.')
     }
 
-    if (isModifiedEvent(event) || !isLeftClickEvent(event)) {
-      return
-    }
-
-    // If target prop is set (e.g. to "_blank"), let browser handle link.
-    if (this.props.target) {
-      return
-    }
+    const location = this.getLocation()
 
     if (typeof location === 'string') {
       return
     }
 
     event.preventDefault()
+
     history.push(location)
   }
 
@@ -93,18 +90,14 @@ export default class Link extends Component {
     }
   }
 
-  renderLink = (props, children) => {
+  renderLink = (props, ...children) => {
     const location = this.getLocation()
 
-    return (
-      <a
-        {...props}
-        onClick={this.handleClick}
-        href={typeof location === 'string' ? location : location.pathname}
-      >
-        {children}
-      </a>
-    )
+    return React.createElement('a', {
+      ...props,
+      onClick: this.handleClick,
+      href: typeof location === 'string' ? location : location.pathname,
+    }, ...children)
   }
 
   render() {
