@@ -104,6 +104,12 @@ export default class Router extends Component {
 }
 
 
+function getDefaultImport(module) {
+  const keys = Object.keys(module)
+  return (keys.length === 1 && keys[0] === 'default') ? module.default : module
+}
+
+
 class Route extends Component {
   static propTypes = {
     routes: PropTypes.array,
@@ -125,17 +131,21 @@ class Route extends Component {
   }
 
   render() {
+    const site = this.props.site
     const [page, ...routes] = this.props.routes
 
-    const content =
+    let content =
       routes.length
-        ? <Route routes={routes} />
-        : page.content
+        ? <Route site={site} routes={routes} />
+        : getDefaultImport(page.content)
+
+    const contentElement =
+      React.isValidElement(content) ? content : React.createElement(content, { site, page })
 
     const wrappedContent =
       page.wrapper
-        ? React.createElement(page.wrapper, { page }, content)
-        : content
+        ? React.createElement(page.wrapper, { site, page }, contentElement)
+        : contentElement
 
     return wrappedContent || <div />
   }

@@ -51,11 +51,13 @@ export default class PageContentLoader extends Component {
   }
 
   render() {
+    const props = Object.assign({ page: this.props.page, key: this.props.page.id }, this.state)
+
     if (typeof this.props.render == 'function') {
-      return this.props.render(this.state)
+      return this.props.render(props)
     }
     else {
-      return React.cloneElement(this.props.render, Object.assign({ key: this.props.page.id }, this.state))
+      return React.cloneElement(this.props.render, props)
     }
   }
 }
