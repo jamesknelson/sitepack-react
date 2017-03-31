@@ -1,6 +1,6 @@
 {
   "name": "sitepack-react",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0-beta.7",
   "description": "React components for working with Sitepack",
   "author": "James K Nelson <james@jamesknelson.com>",
   "license": "MIT",
@@ -26,6 +26,6 @@
     "sitepack": "1.0.0-beta.3"
   },
   "dependencies": {
-    "junctions": "^0.3.2"
+    "junctions": "^0.3.3"
   }
 }
