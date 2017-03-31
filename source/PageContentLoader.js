@@ -19,7 +19,9 @@ export default class PageContentLoader extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setPageState(nextProps.page)
+    if (nextProps.page !== this.props.page) {
+      this.setPageState(nextProps.page)
+    }
   }
 
   setPageState(page) {
