@@ -1,4 +1,7 @@
+import ExecutionEnvironment from 'exenv'
 import React, { Component, PropTypes } from 'react'
+import { unstable_renderSubtreeIntoContainer as renderSubtreeIntoContainer } from 'react-dom'
+import ReactDOMServer from 'react-dom/server'
 import { isContentGetter } from 'sitepack'
 
 
@@ -12,6 +15,30 @@ export default class PageContentLoader extends Component {
       PropTypes.element,
       PropTypes.func,
     ]).isRequired,
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.pageId = 'Sitepack-PageContentLoader-'+props.page.id.replace(/[^\w-]/g, '_')
+    this.state = {}
+    if (ExecutionEnvironment.canUseDOM) {
+      const el = document.getElementById(this.pageId)
+      if (el) {
+        this.state.string = el.innerHTML
+      }
+    }
+  }
+
+  componentDidMount() {
+    if (this.content) {
+      renderSubtreeIntoContainer(this, this.renderContent(), this.container)  
+    }
+  }
+  componentDidUpdate() {
+    if (!this.state.string || this.state.content) {
+      renderSubtreeIntoContainer(this, this.renderContent(), this.container)
+    }
   }
 
   componentWillMount() {
@@ -52,14 +79,39 @@ export default class PageContentLoader extends Component {
     this.id = null
   }
 
-  render() {
-    const props = Object.assign({ page: this.props.page, key: this.props.page.id }, this.state)
+  setContainer = (el) => {
+    this.container = el 
+  }
 
-    if (typeof this.props.render == 'function') {
-      return this.props.render(props)
+  renderContent() {
+    const state = this.state
+    const props = {
+      page: this.props.page,
+      key: this.props.page.id,
+      isLoading: state.isLoading,
+      content: state.content,
+      error: state.error,
+    }
+
+    return (
+      typeof this.props.render == 'function'
+        ? this.props.render(props)
+        : React.cloneElement(this.props.render, props)
+    )
+  }
+
+  render() {
+    const state = this.state
+
+    if (!ExecutionEnvironment.canUseDOM) {
+      const string = ReactDOMServer.renderToString(this.renderContent())
+      return <div ref={this.setContainer} id={this.pageId} dangerouslySetInnerHTML={{ __html: string }} />
+    }
+    else if (state.string) {
+      return <div ref={this.setContainer} id={this.pageId} dangerouslySetInnerHTML={{ __html: state.string }} />
     }
     else {
-      return React.cloneElement(this.props.render, props)
+      return <div ref={this.setContainer} id={this.pageId} />
     }
   }
 }
