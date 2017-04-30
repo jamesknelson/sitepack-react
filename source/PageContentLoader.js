@@ -104,7 +104,7 @@ export default class PageContentLoader extends Component {
     const state = this.state
 
     if (!ExecutionEnvironment.canUseDOM) {
-      const string = ReactDOMServer.renderToString(this.renderContent())
+      const string = ReactDOMServer.renderToStaticMarkup(this.renderContent())
       return <div ref={this.setContainer} id={this.pageId} dangerouslySetInnerHTML={{ __html: string }} />
     }
     else if (state.string) {

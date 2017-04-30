@@ -12,8 +12,8 @@ function isModifiedEvent(event) {
 
 
 
-function DefaultLinkTheme({ factory, active, children }) {
-  return factory({}, children)
+function defaultLinkTheme({ renderLink, className, style, active, children }) {
+  return renderLink({ className, style }, children)
 }
 
 export default class Link extends Component {
@@ -23,7 +23,7 @@ export default class Link extends Component {
     page: PropTypes.string,
     href: PropTypes.string,
     target: React.PropTypes.string,
-    theme: PropTypes.element.isRequired,
+    theme: PropTypes.func.isRequired,
   }
 
   static contextTypes = {
@@ -33,7 +33,7 @@ export default class Link extends Component {
   }
 
   static defaultProps = {
-    theme: <DefaultLinkTheme />,
+    theme: defaultLinkTheme,
     exact: false,
   }
 
@@ -91,9 +91,15 @@ export default class Link extends Component {
   }
 
   renderLink = (props, ...children) => {
+    const { exact, page, theme, className, style, ...other } = this.props
     const location = this.getLocation()
 
+    if (children.length === 0 && props.children) {
+      children[0] = props.children
+    }
+
     return React.createElement('a', {
+      ...other,
       ...props,
       onClick: this.handleClick,
       href: typeof location === 'string' ? location : location.pathname,
@@ -101,9 +107,9 @@ export default class Link extends Component {
   }
 
   render() {
+    const { exact, theme, className, style, children } = this.props
     const location = this.getLocation()
-    const active = typeof location !== 'string' && this.context.isPathActive(location.pathname, this.props.exact)
-    
-    return React.cloneElement(this.props.theme, { factory: this.renderLink, active }, this.props.children)
+    const active = typeof location !== 'string' && this.context.isPathActive(location.pathname, exact)
+    return theme({ renderLink: this.renderLink, active, className, style, children })
   }
 }
