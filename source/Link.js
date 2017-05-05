@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react'
-
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 
 function isLeftClickEvent(event) {
@@ -11,7 +11,6 @@ function isModifiedEvent(event) {
 }
 
 
-
 function defaultLinkTheme({ renderLink, className, style, active, children }) {
   return renderLink({ className, style }, children)
 }
@@ -19,10 +18,10 @@ function defaultLinkTheme({ renderLink, className, style, active, children }) {
 export default class Link extends Component {
   static propTypes = {
     exact: PropTypes.bool,
-    onClick: React.PropTypes.func,
+    onClick: PropTypes.func,
     page: PropTypes.string,
     href: PropTypes.string,
-    target: React.PropTypes.string,
+    target: PropTypes.string,
     theme: PropTypes.func.isRequired,
   }
 

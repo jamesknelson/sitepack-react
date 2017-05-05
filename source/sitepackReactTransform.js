@@ -16,7 +16,7 @@ export default function sitepackReactTransform() {
 
         branches[child.id] = {
           default: child.path == page.default,
-          path: child.path,
+          pattern: child.path,
           next: junctions[child.id] || null,
           data: {
             pageId: child.id,
@@ -27,7 +27,7 @@ export default function sitepackReactTransform() {
       if (page.content && junctions[page.content.id]) {
         branches[page.content.id] = {
           intermediate: !!page.content.absolutePath,
-          path: page.content.path,
+          pattern: page.content.path,
           data: {
             pageId: page.content.id,
           },
@@ -42,7 +42,6 @@ export default function sitepackReactTransform() {
         return page.consume('title')
       }
       else {
-        console.log(branches)
         const junction = createJunction(branches)
         junctions[page.id] = junction
         return page.set({ junction }).consume('junction', 'default', 'title')

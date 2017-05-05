@@ -1,5 +1,6 @@
 import { isPage } from 'sitepack'
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Junctions, { createConverter, locationsEqual } from 'junctions'
 
 

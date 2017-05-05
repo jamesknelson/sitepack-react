@@ -1,5 +1,6 @@
 import ExecutionEnvironment from 'exenv'
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { unstable_renderSubtreeIntoContainer as renderSubtreeIntoContainer } from 'react-dom'
 import ReactDOMServer from 'react-dom/server'
 import { isContentGetter } from 'sitepack'
