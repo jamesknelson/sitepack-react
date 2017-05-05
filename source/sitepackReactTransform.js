@@ -6,7 +6,7 @@ export default function sitepackReactTransform() {
     const junctions = {}
 
     return site.map(page => {
-      if (!page.children) {
+      if (!page.children || page.children.length === 0) {
         return page.consume('title')
       }
 
@@ -16,7 +16,7 @@ export default function sitepackReactTransform() {
 
         branches[child.id] = {
           default: child.path == page.default,
-          pattern: child.path,
+          path: child.path,
           next: junctions[child.id] || null,
           data: {
             pageId: child.id,
@@ -27,7 +27,7 @@ export default function sitepackReactTransform() {
       if (page.content && junctions[page.content.id]) {
         branches[page.content.id] = {
           intermediate: !!page.content.absolutePath,
-          pattern: page.content.path,
+          path: page.content.path,
           data: {
             pageId: page.content.id,
           },
@@ -38,14 +38,9 @@ export default function sitepackReactTransform() {
         }
       }
 
-      if (Object.keys(branches).length === 0) {
-        return page.consume('title')
-      }
-      else {
-        const junction = createJunction(branches)
-        junctions[page.id] = junction
-        return page.set({ junction }).consume('junction', 'default', 'title')
-      }
+      const junction = createJunction(branches)
+      junctions[page.id] = junction
+      return page.set({ junction }).consume('junction', 'default', 'title')
     })
   }
 }

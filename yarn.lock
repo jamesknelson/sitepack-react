@@ -762,9 +762,9 @@ json5@^0.5.0:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/json5/-/json5-0.5.1.tgz#1eade7acc012034ad84e2396767ead9fa5495821"
 
-junctions@^0.3.3:
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/junctions/-/junctions-0.3.3.tgz#efe49595ad501285fae4d4e04f3f157e88622d3b"
+junctions@^0.3.6:
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/junctions/-/junctions-0.3.6.tgz#2606035283a0863337cbdf07f8d9e7ca85245cc1"
 
 lodash@^4.2.0:
   version "4.17.4"
