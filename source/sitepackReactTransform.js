@@ -35,15 +35,18 @@ export default function sitepackReactTransform() {
           // Site#map is gauranteed to iterate in an order that results in
           // children being processed before their parents, so this works.
           next: junctions[page.content.id],
-        } 
+        }
       }
 
-      const junction = createJunction(branches)
-      junctions[page.id] = junction
-
-      return Object.keys(branches).length === 0
-        ? page.consume('title')
-        : page.set({ junction }).consume('junction', 'default', 'title')
+      if (Object.keys(branches).length === 0) {
+        return page.consume('title')
+      }
+      else {
+        console.log(branches)
+        const junction = createJunction(branches)
+        junctions[page.id] = junction
+        return page.set({ junction }).consume('junction', 'default', 'title')
+      }
     })
   }
 }

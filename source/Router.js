@@ -41,7 +41,7 @@ export default class Router extends Component {
   }
 
   componentWillMount() {
-    this.converter = createConverter(this.props.site.rootPage.junction)
+    this.converter = createConverter(this.props.site.rootPage.junction, this.props.baseLocation)
     this.handleLocationChange(this.props.history.location)
   }
 
@@ -52,7 +52,7 @@ export default class Router extends Component {
   componentWillUnmount() {
     if (this.unlisten) {
       this.unlisten()
-      this.unlisten = null  
+      this.unlisten = null
     }
   }
 
@@ -60,7 +60,7 @@ export default class Router extends Component {
     // Don't recreate the converter unless we need to, as it can be an expensive operation,
     // and is only needed when the application loads new code
     if (this.props.site.rootPage.junction !== nextProps.site.rootPage.junction) {
-      this.converter = createConverter(this.props.site.rootPage.junction, nextProps.site.rootPage.junction)
+      this.converter = createConverter(nextProps.site.rootPage.junction, this.props.baseLocation)
     }
   }
 
