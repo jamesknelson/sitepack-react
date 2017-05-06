@@ -1,7 +1,7 @@
 import ExecutionEnvironment from 'exenv'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { unstable_renderSubtreeIntoContainer as renderSubtreeIntoContainer } from 'react-dom'
+import ReactDOM, { unstable_renderSubtreeIntoContainer as renderSubtreeIntoContainer } from 'react-dom'
 import ReactDOMServer from 'react-dom/server'
 import { isContentGetter } from 'sitepack'
 
@@ -33,7 +33,7 @@ export default class PageContentLoader extends Component {
 
   componentDidMount() {
     if (this.content) {
-      renderSubtreeIntoContainer(this, this.renderContent(), this.container)  
+      renderSubtreeIntoContainer(this, this.renderContent(), this.container)
     }
   }
   componentDidUpdate() {
@@ -78,10 +78,13 @@ export default class PageContentLoader extends Component {
 
   componentWillUnmount() {
     this.id = null
+    try {
+      ReactDOM.unmountComponentAtNode(this.container)
+    } catch (e) { }
   }
 
   setContainer = (el) => {
-    this.container = el 
+    this.container = el
   }
 
   renderContent() {
