@@ -99,7 +99,7 @@ export default class Router extends Component {
     }
 
     return (
-      <Route site={site} routes={routes} converter={this.converter} />
+      <Route {...this.props} site={site} routes={routes} converter={this.converter} />
     )
   }
 }
@@ -132,8 +132,7 @@ class Route extends Component {
   }
 
   render() {
-    const site = this.props.site
-    const [page, ...routes] = this.props.routes
+    const { routes: [page, ...routes], site, ...other } = this.props
 
     let content =
       routes.length
@@ -145,8 +144,8 @@ class Route extends Component {
 
     const wrappedContent =
       page.wrapper
-        ? React.createElement(page.wrapper, { site, page }, contentElement)
-        : contentElement
+        ? React.createElement(page.wrapper, { ...other, site, page }, contentElement)
+        : contentElement && React.cloneElement(contentElement, other)
 
     return wrappedContent || <div />
   }

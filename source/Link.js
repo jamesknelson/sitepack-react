@@ -11,8 +11,8 @@ function isModifiedEvent(event) {
 }
 
 
-function defaultLinkTheme({ renderLink, className, style, active, children }) {
-  return renderLink({ className, style }, children)
+function defaultLinkTheme({ renderControl, className, style, active, children }) {
+  return renderControl({ className, style }, children)
 }
 
 export default class Link extends Component {
@@ -89,7 +89,7 @@ export default class Link extends Component {
     }
   }
 
-  renderLink = (props, ...children) => {
+  renderControl = (props, ...children) => {
     const { exact, page, theme, className, style, ...other } = this.props
     const location = this.getLocation()
 
@@ -109,6 +109,6 @@ export default class Link extends Component {
     const { exact, theme, className, style, children } = this.props
     const location = this.getLocation()
     const active = typeof location !== 'string' && this.context.isPathActive(location.pathname, exact)
-    return theme({ renderLink: this.renderLink, active, className, style, children })
+    return theme({ renderControl: this.renderControl, active, className, style, children })
   }
 }

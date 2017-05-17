@@ -25,7 +25,7 @@ export default class PageContentLoader extends Component {
     this.state = {}
     if (ExecutionEnvironment.canUseDOM) {
       const el = document.getElementById(this.pageId)
-      if (el) {
+      if (el && el.innerHTML) {
         this.state.string = el.innerHTML
       }
     }
@@ -105,17 +105,18 @@ export default class PageContentLoader extends Component {
   }
 
   render() {
+    const props = this.props
     const state = this.state
 
     if (!ExecutionEnvironment.canUseDOM) {
       const string = ReactDOMServer.renderToStaticMarkup(this.renderContent())
-      return <div ref={this.setContainer} id={this.pageId} dangerouslySetInnerHTML={{ __html: string }} />
+      return <div ref={this.setContainer} className={props.className} style={props.style} id={this.pageId} dangerouslySetInnerHTML={{ __html: string }} />
     }
     else if (state.string) {
-      return <div ref={this.setContainer} id={this.pageId} dangerouslySetInnerHTML={{ __html: state.string }} />
+      return <div ref={this.setContainer} className={props.className} style={props.style} id={this.pageId} dangerouslySetInnerHTML={{ __html: state.string }} />
     }
     else {
-      return <div ref={this.setContainer} id={this.pageId} />
+      return <div ref={this.setContainer} className={props.className} style={props.style} id={this.pageId}>{this.renderContent()}</div>
     }
   }
 }
