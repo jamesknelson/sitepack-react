@@ -11,7 +11,7 @@ function isModifiedEvent(event) {
 }
 
 
-function defaultLinkTheme({ renderControl, className, style, active, children }) {
+function defaultLinkview({ renderControl, className, style, active, children }) {
   return renderControl({ className, style }, children)
 }
 
@@ -22,7 +22,7 @@ export default class Link extends Component {
     page: PropTypes.string,
     href: PropTypes.string,
     target: PropTypes.string,
-    theme: PropTypes.func.isRequired,
+    view: PropTypes.func.isRequired,
   }
 
   static contextTypes = {
@@ -32,7 +32,7 @@ export default class Link extends Component {
   }
 
   static defaultProps = {
-    theme: defaultLinkTheme,
+    view: defaultLinkview,
     exact: false,
   }
 
@@ -90,7 +90,7 @@ export default class Link extends Component {
   }
 
   renderControl = (props, ...children) => {
-    const { exact, page, theme, className, style, ...other } = this.props
+    const { exact, page, view, className, style, ...other } = this.props
     const location = this.getLocation()
 
     if (children.length === 0 && props.children) {
@@ -106,9 +106,9 @@ export default class Link extends Component {
   }
 
   render() {
-    const { exact, theme, className, style, children } = this.props
+    const { exact, view, className, style, children } = this.props
     const location = this.getLocation()
     const active = typeof location !== 'string' && this.context.isPathActive(location.pathname, exact)
-    return theme({ renderControl: this.renderControl, active, className, style, children })
+    return React.createElement(view, { renderControl: this.renderControl, active, className, style, children })
   }
 }
