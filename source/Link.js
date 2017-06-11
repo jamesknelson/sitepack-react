@@ -11,7 +11,7 @@ function isModifiedEvent(event) {
 }
 
 
-function defaultLinkview({ renderControl, className, style, active, children }) {
+function defaultLinkView({ renderControl, className, style, active, children }) {
   return renderControl({ className, style }, children)
 }
 
@@ -32,7 +32,7 @@ export default class Link extends Component {
   }
 
   static defaultProps = {
-    view: defaultLinkview,
+    view: defaultLinkView,
     exact: false,
   }
 
@@ -70,7 +70,7 @@ export default class Link extends Component {
     let { page, href } = this.props
 
     if (page && href) {
-      console.warning('You supplied both a "page" and a "href" to <Link>. Ignoring page...')
+      console.warn('You supplied both a "page" and a "href" to <Link>. Ignoring page...')
     }
 
     if (href) {
@@ -85,7 +85,7 @@ export default class Link extends Component {
       return { pathname: this.context.getPathForPageId(pageId), hash }
     }
     else {
-      console.warning('Your <Link> has no "page" or "href"!')
+      console.warn('Your <Link> has no "page" or "href"!')
     }
   }
 

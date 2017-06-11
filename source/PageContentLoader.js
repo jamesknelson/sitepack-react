@@ -6,6 +6,24 @@ import ReactDOMServer from 'react-dom/server'
 import { isContentGetter } from 'sitepack'
 
 
+class RouterContext extends Component {
+  static childContextTypes = {
+    isPathActive: PropTypes.func.isRequired,
+    getPathForPageId: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+  }
+
+  getChildContext() {
+    const { children, ...context } = this.props
+    return context
+  }
+
+  render() {
+    return React.Children.only(this.props.children)
+  }
+}
+
+
 export default class PageContentLoader extends Component {
   static propTypes = {
     page: PropTypes.shape({
@@ -32,12 +50,12 @@ export default class PageContentLoader extends Component {
   }
 
   componentDidMount() {
-    if (this.content) {
+    if (this.state.string && this.content) {
       renderSubtreeIntoContainer(this, this.renderContent(), this.container)
     }
   }
   componentDidUpdate() {
-    if (!this.state.string || this.state.content) {
+    if (this.state.string && this.content) {
       renderSubtreeIntoContainer(this, this.renderContent(), this.container)
     }
   }
@@ -108,8 +126,17 @@ export default class PageContentLoader extends Component {
     const props = this.props
     const state = this.state
 
+    // TODO: use a bus instead of context. If I want context for the documents,
+    // then add it within the document wrappers in the app itself.
     if (!ExecutionEnvironment.canUseDOM) {
-      const string = ReactDOMServer.renderToStaticMarkup(this.renderContent())
+      const content =
+        <RouterContext
+          isPathActive={props.isPathActive}
+          getPathForPageId={props.getPathForPageId}
+          history={props.history}>
+          {this.renderContent()}
+        </RouterContext>
+      const string = ReactDOMServer.renderToStaticMarkup(content)
       return <div ref={this.setContainer} className={props.className} style={props.style} id={this.pageId} dangerouslySetInnerHTML={{ __html: string }} />
     }
     else if (state.string) {
