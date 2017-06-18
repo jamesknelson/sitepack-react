@@ -25,6 +25,12 @@ class RouterContext extends Component {
 
 
 export default class PageContentLoader extends Component {
+  static contextTypes = {
+    isPathActive: PropTypes.func.isRequired,
+    getPathForPageId: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+  }
+
   static propTypes = {
     page: PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -36,8 +42,8 @@ export default class PageContentLoader extends Component {
     ]).isRequired,
   }
 
-  constructor(props) {
-    super(props)
+  constructor(props, context) {
+    super(props, context)
 
     this.pageId = 'Sitepack-PageContentLoader-'+props.page.id.replace(/[^\w-]/g, '_')
     this.state = {}
@@ -50,12 +56,12 @@ export default class PageContentLoader extends Component {
   }
 
   componentDidMount() {
-    if (this.state.string && this.content) {
+    if (this.state.string && this.props.page.content) {
       renderSubtreeIntoContainer(this, this.renderContent(), this.container)
     }
   }
   componentDidUpdate() {
-    if (this.state.string && this.content) {
+    if (this.state.string && this.props.page.content) {
       renderSubtreeIntoContainer(this, this.renderContent(), this.container)
     }
   }
@@ -124,6 +130,7 @@ export default class PageContentLoader extends Component {
 
   render() {
     const props = this.props
+    const context = this.context
     const state = this.state
 
     // TODO: use a bus instead of context. If I want context for the documents,
@@ -131,9 +138,9 @@ export default class PageContentLoader extends Component {
     if (!ExecutionEnvironment.canUseDOM) {
       const content =
         <RouterContext
-          isPathActive={props.isPathActive}
-          getPathForPageId={props.getPathForPageId}
-          history={props.history}>
+          isPathActive={context.isPathActive}
+          getPathForPageId={context.getPathForPageId}
+          history={context.history}>
           {this.renderContent()}
         </RouterContext>
       const string = ReactDOMServer.renderToStaticMarkup(content)
